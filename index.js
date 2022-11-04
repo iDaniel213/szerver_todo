@@ -10,7 +10,7 @@ app.use(express.json())
 
 app.use(cors())
 
-app.get('/name',(request,response)=>{
+app.get('/all',(request,response)=>{
     console.log("ok")
     db.query('select * from todo',(error, results)=>{
         if (error)
@@ -30,12 +30,33 @@ app.post('/add',(request,response)=>{
 })
 app.delete('/delete/:id',(request,response)=>{
     const {id} = request.params
-    db.query('delete from todo where name=?',[id],(error, results)=>{
+    db.query('delete from todo where id=?',[id],(error, results)=>{
         if (error)
             console.log(error)
         else 
             response.send(results)
     })
 })
+
+app.put('/done/:id',(request,response)=>{
+    const {id} = request.params
+    db.query('update todo set status=not status where id=?',[id],(error, results)=>{
+        if (error)
+            console.log(error)
+        else 
+            response.send(results)
+    })
+})
+
+app.delete('/deleteAll',(request,response)=>{
+    const {id} = request.params
+    db.query('delete from todo',[id],(error, results)=>{
+        if (error)
+            console.log(error)
+        else 
+            response.send(results)
+    })
+})
+
 
 app.listen(8000,()=>console.log("server listening..."))
